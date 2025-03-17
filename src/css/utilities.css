@@ -1,0 +1,98 @@
+/* Notes */
+.note
+{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 250px;
+    width: 250px;
+    box-shadow: var(--box-shadow);
+
+    & h3
+    {
+        display: flex;
+        align-items: center;
+        height: 70px;
+        text-indent: 10px;
+        font-size: 20px;
+    }
+
+    & .note-body
+    {
+        height: 100%;
+        padding: 10px;
+    }
+
+    .note-buttons-container
+    {
+        display: flex;
+        gap: 15px;
+        position: absolute;
+        bottom: 10px;
+        right: 15px;
+    }
+
+    .edit-note-btn,
+    .delete-note-btn
+    {
+        color: inherit;
+        width: fit-content;
+        font-size: 15px;
+        background-color: transparent;
+        cursor: pointer;
+        
+        & i
+        {
+            pointer-events: none;
+        }
+    }
+
+}
+
+/* Primary Note */
+.primary-note > *
+{
+    color: var(--primary-note-color);
+    background: var(--primary-note-background-color);
+}
+
+.primary-note h3
+{
+    border-bottom: 1.5px solid var(--primary-note-border-color);
+}
+
+/* Secondary Note */
+.secondary-note > *
+{
+    color: var(--secondary-note-color);
+    background: var(--secondary-note-background-color);
+}
+
+.secondary-note h3
+{
+    border-bottom: 1.5px solid var(--secondary-note-border-color);
+}
+
+/* Tertiary Note */
+.tertiary-note > *
+{
+    color: var(--tertiary-note-color);
+    background: var(--tertiary-note-background-color);
+}
+
+.tertiary-note h3
+{
+    border-bottom: 1.5px solid var(--tertiary-note-border-color);
+}
+
+/* Quaternary Note */
+.quaternary-note > *
+{
+    color: var(--quaternary-note-color);
+    background: var(--quaternary-note-background-color);
+}
+
+.quaternary-note h3
+{
+    border-bottom: 1.5px solid var(--quaternary-note-border-color);
+}

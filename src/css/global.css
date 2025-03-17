@@ -1,0 +1,146 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans: 100, 200, 300, 400, 500, 600, 700, 800, 900');
+
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    border: none;
+    outline: none;
+    user-select: none;
+}
+
+:root
+{
+    /* Font Sizes */
+
+    --heading-one-font-size: clamp(2.3328rem, 2.0827rem + 1.2504vw, 3.0518rem);
+    --heading-two-font-size: clamp(1.944rem, 1.771rem + 0.8651vw, 2.4414rem);
+    --heading-three-font-size: clamp(1.62rem, 1.5041rem + 0.5793vw, 1.9531rem);
+    --heading-four-font-size: clamp(1.35rem, 1.2761rem + 0.3696vw, 1.5625rem);
+    --heading-five-font-size: clamp(1.125rem, 1.0815rem + 0.2174vw, 1.25rem);
+    --heading-six-font-size: clamp(0.075rem, -0.4424rem + 2.587vw, 1.5625rem);
+    --paragraph-font-size: clamp(0.8333rem, 0.7754rem + 0.2899vw, 1rem);
+        
+    /* Colors */
+    --body-background-color: linear-gradient(339deg, rgba(2,0,36,1) 0%, rgba(134,134,226,1) 0%, rgba(0,212,255,1) 50%);
+    --primary-text-color: ;
+    --secondry-text-color: ;
+
+
+    /* Notes */
+    --primary-note-color: #fff;
+    --primary-note-background-color: #16f116;
+    --primary-note-border-color: #fff;
+
+    --secondary-note-color: #fff;
+    --secondary-note-background-color: #191972;
+    --secondary-note-border-color: #fff;
+
+    --tertiary-note-color: #fff;
+    --tertiary-note-background-color: #000;
+    --tertiary-note-border-color: #fff;
+
+    --quaternary-note-color: #000;
+    --quaternary-note-background-color: #fff;
+    --quaternary-note-border-color: #000;
+
+
+    /* Radii */
+    --base-border-radius: 10px;
+
+    /* Shadows */
+    --text-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+    --box-shadow: 0 2px 5px rgba(0, 0, 0, .3);
+}
+
+body
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Open Sans', sans-serif;
+    background-image: var(--body-background-color);
+    min-height: 100vh;
+}
+
+main
+{
+    padding: 40px 20px;
+    height: 100%;
+    width: 80%;
+}
+
+header
+{
+    font-family: inherit;
+}
+
+h1
+{
+    font-size: var(--heading-one-font-size);
+}
+
+h2
+{
+    font-size: var(--heading-two-font-size);
+}
+
+h3
+{
+    font-size: var(--heading-three-font-size);
+}
+
+h4
+{
+    font-size: var(--heading-four-font-size);
+}
+
+h5
+{
+    font-size: var(--heading-five-font-size);
+}
+
+h6
+{
+    font-size: var(--heading-six-font-size);
+}
+
+p
+{
+    font-family: inherit;
+    font-size: var(--paragraph-font-size);
+}
+
+a
+{
+    text-decoration: none;
+}
+
+li
+{
+    list-style: none;
+}
+
+input,
+textarea
+{
+    direction: ltr;
+}
+
+textarea
+{
+    resize: none;
+}
+
+button
+{
+    background-color: transparent;
+    cursor: pointer;
+}
+
+button:active
+{
+    transform: scale(.98);
+    box-shadow: none;
+}

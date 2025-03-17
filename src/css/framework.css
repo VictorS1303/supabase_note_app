@@ -1,0 +1,473 @@
+/* TEXT CLASSES */
+.primary-text
+{
+    color: var(--primary-text-color);
+}
+
+.secondary-text
+{
+    color: var(--secondary-text-color);
+}
+
+.tertiary-text
+{
+    color: var(--tertiary-text-color);
+}
+
+.quaternary-text
+{
+    color: var(--quaternary-text-color);
+}
+
+.date-text
+{
+    color: var(--date-color);
+}
+
+/* PADDINGS */
+.padding-inline
+{
+    padding-inline: calc(25dvw / 2);
+}
+
+/* MARGINS */
+.margin-inline
+{
+    margin-inline: calc(25dvw / 2);
+}
+
+/* BACKGROUND CLASSES */
+.primary-background
+{
+    background-color: var(--primary-background-color);
+}
+
+.secondary-background
+{
+    background-color: var(--secondary-background-color);
+}
+
+.tertiary-background
+{
+    background-color: var(--tertiary-background-color);
+}
+
+.quaternary-background
+{
+    background-color: var(--quaternary-background-color);
+}
+
+
+/* BUTTONS */
+
+/* Call TO Action */
+.cta-btn
+{
+    border: 1px solid var(--cta-btn-border-color);
+    padding: 10px 15px;
+    font-size: var(--cta-btn-font-size);
+    margin-top: 15px;
+    transition: color .15s ease-in, background .15s ease-in;
+
+    &:hover
+    {
+        color: var(--cta-btn-hover-color);
+        background-color: var(--cta-btn-hover-background-color);
+    }
+}
+
+
+/* Call To Action */
+.prev-btn,
+.next-btn
+{
+    padding: 10px 15px;
+    min-width: 60px;
+    width: fit-content;
+    border: 2px solid var(--cta-btn-border-color);
+    border: 1px solid var(--cta-btn-border-color);
+    transition: color .15s ease-in, background .15s ease-in;
+
+    &:hover
+    {
+        color: var(--cta-btn-hover-color);
+        background-color: var(--cta-btn-hover-background-color);
+        transition: color .15s ease-in, background .15s ease-in;
+    }
+}
+
+/* DISPLAYS */
+.d-inline
+{
+    display: inline;
+}
+
+.d-block
+{
+    display: block;
+}
+
+.d-inline_block
+{
+    display: inline-block;
+}
+
+.d-contents
+{
+    display: contents;
+}
+
+.d-grid
+{
+    display: grid;
+}
+
+.d-flex
+{
+    display: flex;
+}
+
+
+
+
+
+
+/* Grid -> Grid Template Columns */
+.gtc-one
+{
+    grid-template-columns: 1fr;
+}
+
+.gtc-two
+{
+    grid-template-columns: repeat(2, 1fr);
+}
+
+.gtc-three
+{
+    grid-template-columns: repeat(3, 1fr);
+}
+
+.gtc-four
+{
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.gtc-five
+{
+    grid-template-columns: repeat(5, 1fr);
+}
+
+.gtc-six
+{
+    grid-template-columns: repeat(6, 1fr);
+}
+
+.gtc-seven
+{
+    grid-template-columns: repeat(7, 1fr);
+}
+
+.gtc-eight
+{
+    grid-template-columns: repeat(8, 1fr);
+}
+
+.gtc-nine
+{
+    grid-template-columns: repeat(9, 1fr);
+}
+
+.gtc-ten
+{
+    grid-template-columns: repeat(10, 1fr);
+}
+
+.gtr-one
+{
+    grid-template-rows: 1fr;
+}
+
+/* Grid -> Grid Template Rows */
+.gtr-two
+{
+    grid-template-rows: 2fr;
+}
+
+.gtr-three
+{
+    grid-template-rows: 1fr;
+}
+
+.gtr-four
+{
+    grid-template-rows: 4fr;
+}
+
+.gtr-five
+{
+    grid-template-rows: 5fr;
+}
+
+.gtr-six
+{
+    grid-template-rows: 6fr;
+}
+
+.gtr-seven
+{
+    grid-template-rows: 7fr;
+}
+
+.gtr-eight
+{
+    grid-template-rows: 8fr;
+}
+
+.gtr-nine
+{
+    grid-template-rows: 9fr;
+}
+
+.gtr-ten
+{
+    grid-template-rows: 10fr;
+}
+
+
+/* DIRECTIONS */
+.flex-d-row
+{
+    flex-direction: row;
+}
+
+.flex-d-column
+{
+    flex-direction: column;
+}
+
+
+/* ALIGNMENTS */
+
+/* Alignments -> Container */
+.ac-stretch
+{
+    align-content: stretch;
+}
+
+.ac-center
+{
+    align-content: center;
+}
+
+.ac-start
+{
+    align-content: start;
+}
+
+.ac-end
+{
+    align-content: end;
+}
+
+.ac-space_between
+{
+    align-content: space-between;
+}
+
+.ac-space_around
+{
+    align-content: space-around;
+}
+
+.ac-space_evenly
+{
+    align-content: space-evenly;
+}
+
+.ac-initial
+{
+    align-content: initial;
+}
+
+.ac-inherit
+{
+    align-content: inherit;
+}
+
+/* Alignment -> Children */
+.as-auto
+{
+    align-self: auto;
+}
+
+.as-stretch
+{
+    align-self: stretch;
+}
+
+.as-center
+{
+    align-self: center;
+}
+
+.as-start
+{
+    align-self: start;
+}
+
+.as-end
+{
+    align-self: end;
+}
+
+.as-baseline
+{
+    align-self: baseline;
+}
+
+.as-initial
+{
+    align-self: initial;
+}
+
+.as-inherit
+{
+    align-self: inherit;
+}
+
+
+/* Justify -> Container */
+.jc-start
+{
+    justify-content: start;
+}
+
+.jc-end
+{
+    justify-content: end;
+}
+
+.jc-center
+{
+    justify-content: center;
+}
+
+.jc-space_between
+{
+    justify-content: space-between;
+}
+
+.jc-space_around
+{
+    justify-content: space-around;
+}
+
+.jc-space_evenly
+{
+    justify-content: space-evenly;
+}
+
+.jc-initial
+{
+    justify-content: initial;
+}
+
+.jc-inherit
+{
+    justify-content: inherit;
+}
+
+/* Justify -> Children */
+.jc-start
+{
+    justify-content: start;
+}
+
+.jc-center
+{
+    justify-content: center;
+}
+
+.jc-end
+{
+    justify-content: end;
+}
+
+/* Aligment -> Items */
+.ai-start
+{
+    align-items: start;
+}
+
+.ai-center
+{
+    align-items: center;
+}
+
+.ai-end
+{
+    align-items: end;
+}
+
+/* DIRECTIONS */
+.fd-row
+{
+    flex-direction: row;
+}
+
+.fd-row_reverse
+{
+    flex-direction: row-reverse;
+}
+
+.fd-column
+{
+    flex-direction: column;
+}
+
+.fd-column_reverse
+{
+    flex-direction: column-reverse;
+}
+
+.fd-initial
+{
+    flex-direction: initial;
+}
+
+.fd-inherit
+{
+    flex-direction: inherit;
+}
+
+/* TEXT ALIGNMENT */
+.ta-left
+{
+    text-align: left;
+}
+
+.ta-center
+{
+    text-align: center;
+}
+
+.ta-right
+{
+    text-align: right;
+}
+
+.ta-justify
+{
+    text-align: justify;
+}
+
+.ta-initial
+{
+    text-align: initial;
+}
+
+.ta-inherit
+{
+    text-align: inherit;
+}
