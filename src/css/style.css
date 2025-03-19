@@ -176,6 +176,7 @@ dialog.create-note-modal
     left: 20px;
     bottom: -40px;
     font-size: 20px;
+    color: #000 !important;
     transition: color .15s ease-in, bottom .3s ease-in;
 
     &.active
@@ -230,3 +231,4 @@ dialog.create-note-modal
         }
     }
 }
+
