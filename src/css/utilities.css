@@ -7,6 +7,8 @@
     height: 250px;
     width: 250px;
     box-shadow: var(--box-shadow);
+    transition: transform .3s ease-in;
+
 
     & h3
     {
@@ -47,6 +49,11 @@
         }
     }
 
+    &.hidden
+    {
+        transform: scale(0);
+        transition: transform .3s ease-in;
+    }
 }
 
 /* Primary Note */
@@ -95,4 +102,155 @@
 .quaternary-note h3
 {
     border-bottom: 1.5px solid var(--quaternary-note-border-color);
+}
+
+/* Buttons */
+.confirmation-modal
+{
+    .modal-buttons-container
+    {
+        margin-top: 20px;
+
+        & > button
+        {
+            padding: 10px 20px;
+            font-size: 1rem;
+            flex: 1 1 auto;
+        }
+    }    
+}
+
+.cancel-btn
+{
+    color: #000;
+    background-color: greenyellow;
+}
+
+.confirm-btn
+{
+    height: fit-content;
+    color: #fff;
+    background-color: red;
+}
+
+/* Modal */
+dialog
+{
+    position: absolute;
+    top: -50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fff;
+    transition: top .6s ease-in;
+    width: fit-content;
+    padding: 20px 40px;
+    transition: top .6s ease-in;
+
+    &[open]
+    {
+        top: 50%;
+        transition: top .6s ease-in;
+    }
+
+    &::backdrop
+    {
+        backdrop-filter: blur(10px);
+        transition: backdrop-filter .3s ease-in;
+    }
+
+    p
+    {
+        margin-block: 40px;
+    }
+
+    .modal-buttons-container
+    {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 20px;
+
+        & button
+        {
+            flex: 1 1 auto; /* Allow buttons to grow/shrink */
+            min-width: 120px; /* Set a reasonable minimum width */
+        }
+    }
+
+    .modal-close-btn
+    {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        padding-bottom: 20px;
+        transition: color .15s ease-in;
+
+        & i
+        {
+            font-size: 20px;
+        }
+
+        &:hover
+        {
+            color: red;
+            transition: color .15s ease-in;
+        }
+    }
+
+    & form
+    {
+        display: flex;
+        flex-direction: column;
+        margin-top: 30px;
+        gap: 60px;
+        height: 100%;
+
+        & div
+        {
+            font-family: inherit;
+            display: inherit;
+            flex-direction: inherit;
+            gap: 10px;
+        }
+
+        & input
+        {
+            border: 1.5px solid #000;
+            padding: 10px;
+        }
+        
+        & input,
+        & textarea
+        {
+            font-family: inherit;
+            transition: box-shadow .15s ease-in;
+
+            &:focus
+            {
+                box-shadow: inset var(--box-shadow);
+                transition: box-shadow .15s ease-in;
+            }
+        }
+
+        & textarea
+        {
+            height: 150px;
+            border: 1.5px solid #000;
+            text-indent: 10px;
+            padding-top: 10px;
+            
+        }
+
+        & button
+        {
+            font-family: inherit;
+            color: #fff;
+            background-color: #000;
+            padding: 10px;
+            font-size: 17px;
+            margin-top: -20px;
+            box-shadow: var(--box-shadow);
+            cursor: pointer;
+        }
+    }
 }

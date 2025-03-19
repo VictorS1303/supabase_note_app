@@ -136,6 +136,7 @@ textarea
 button
 {
     background-color: transparent;
+    white-space: nowrap;
     cursor: pointer;
 }
 

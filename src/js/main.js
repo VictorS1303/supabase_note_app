@@ -1,152 +1,255 @@
 
-const notesContainer = document.querySelector('.notes-container');
-const noteTitle = document.querySelector('.note-title');
-const noteBody = document.querySelector('.note-body');
-const createNoteModal = document.querySelector('.create-note-modal');
-const openCreateNotePopoverModalBtn = document.getElementById('open_create_ote_popover_modal_btn');
-const submitCreateNoteButton = document.querySelector('#submit_create_note_btn');
-const createNoteForm = document.querySelector('#create_note_form');
+import { supabase } from './supabase.js'
+
+const notesContainer = document.querySelector('.notes-container')
+const createNoteModal = document.querySelector('.create-note-modal')
+const openCreateNotePopoverModalBtn = document.getElementById('open_create_note_popover_modal_btn')
+const createNoteForm = document.querySelector('#create_note_form')
 const noteTitleInputField = document.querySelector('#note_title_input')
 const noteTextInputField = document.querySelector('#note_body_text_input')
 const editNoteModal = document.querySelector('#edit_note_modal')
 const editNoteForm = document.querySelector('#edit_note_form')
 const deleteNoteModal = document.querySelector('#delete_note_modal')
-const deleteNoteModalCloseBtn = document.querySelector('#delete_note_modal_close_btn')
 const deleteNoteModalButtonsContainer = document.querySelector('#delete_note_modal_buttons_container')
+const deleteAllNotesModal = document.querySelector('#delete_all_notes_modal')
+const deleteAllNotesModalOpenBtn = document.querySelector('#delete_all_notes_modal_btn')
+const closeModalBtns = document.querySelectorAll('.modal-close-btn')
+const cancelBtns = document.querySelectorAll('.cancel-btn')
+const deleteAllNotesBtn = document.querySelector('#confirm_all_notes_deletion_btn')
+const filterInput = document.querySelector('#filter_input')
 
 
 // EVENT LISTENERS //
-openCreateNotePopoverModalBtn.addEventListener('mouseenter', updateCreateNoteButtonBackgroundColor);
-openCreateNotePopoverModalBtn.addEventListener('click', openCreateNoteModal);
-openCreateNotePopoverModalBtn.addEventListener('mouseleave', resetCreateNoteButtonBackgroundColor);
-createNoteForm.addEventListener('submit', (e) => validateSubmitForm(e));
+openCreateNotePopoverModalBtn.addEventListener('mouseenter', updateCreateNoteButtonBackgroundColor)
+openCreateNotePopoverModalBtn.addEventListener('click', openCreateNoteModal)
+openCreateNotePopoverModalBtn.addEventListener('mouseleave', resetCreateNoteButtonBackgroundColor)
+createNoteForm.addEventListener('submit', (e) => validateSubmitForm(e))
 deleteNoteModalButtonsContainer.addEventListener('click', (e) => confirmNoteDeleteAction(e))
-deleteNoteModalCloseBtn.addEventListener('click', closeDeleteNoteModal)
 editNoteForm.addEventListener('submit', (e) => validateEditForm(e))
-
-
-
+closeModalBtns.forEach((closeModalBtn) => closeModalBtn.addEventListener('click', (e) => closeModal(e)))
+deleteAllNotesModalOpenBtn.addEventListener('click', openDeleteAllNotesModal)
+cancelBtns.forEach((cancelBtn) => cancelBtn.addEventListener('click', (e) => cancelModal(e)))
+deleteAllNotesBtn.addEventListener('click', deleteAllNotes)
+filterInput.addEventListener('input', filterNotes)
 
 // FUNCTIONS //
+
+// Display delete all notes button
+function displayDeleteAllNotesButton()
+{
+    notesContainer.children.length >= 1 ? deleteAllNotesModalOpenBtn.classList.add('active') : deleteAllNotesModalOpenBtn.classList.remove('active')
+}
+
+
+
+// FIlter notes
+async function filterNotes()
+{
+    const filterText = filterInput.value.trim().toLowerCase() // Get and normalize filter text
+
+    if (!filterText)
+    {
+        // If the input is empty, fetch all notes
+        fetchNotes()
+        return
+    }
+
+    // Query Supabase to fetch notes where note_title contains the filterText
+    const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .ilike('note_title', `%${filterText}%`)  // 'ilike' is case-insensitive
+        .order('created_at', { ascending: true })
+
+    if (error)
+    {
+        console.error("Error fetching filtered notes:", error)
+        return
+    }
+
+    hideNotes(data)
+
+    // Clear current notes and render the filtered ones
+    notesContainer.innerHTML = ''
+    data.forEach((note) => createNote(note.id, note.note_title, note.note_text, note.note_style))
+
+    // Update the delete button state after filtering
+    displayDeleteAllNotesButton()
+}
+
+function hideNotes(data, filterText)
+{
+    // Loop through each note and apply the filter logic
+    notesContainer.innerHTML = '' // Clear the container before rendering
+
+    data.forEach((note) =>
+    {
+        const noteElement = createNote(note.id, note.note_title, note.note_text, note.note_style)
+
+        // If the note title doesn't match the filter text, add the 'hidden' class
+        if (filterText && !note.note_title.toLowerCase().includes(filterText))
+        {
+            noteElement.classList.add('hidden')
+        }
+
+        // Append the note to the container (whether hidden or not)
+        notesContainer.appendChild(noteElement)
+    })
+}
+
+
+// Close Modal
+function closeModal(e)
+{
+    const modal = e.target.closest('dialog')
+    modal.close()
+}
+
+// Cancel Modal
+function cancelModal(e)
+{
+    if (e.target.matches('.cancel-btn'))
+    {
+        closeModal(e)
+    }
+}
 
 // Update Create Note Button Background Color
 function updateCreateNoteButtonBackgroundColor()
 {
-    openCreateNotePopoverModalBtn.style.backgroundColor = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`;
+    openCreateNotePopoverModalBtn.style.backgroundColor = `#${Math.floor(Math.random() * 0xffffff).toString(16)}`
 }
 
 // Reset Create Note Button Background Color
 function resetCreateNoteButtonBackgroundColor()
 {
-    openCreateNotePopoverModalBtn.style.backgroundColor = null;
+    openCreateNotePopoverModalBtn.style.backgroundColor = null
 }
 
 // Open Note Modal
 function openCreateNoteModal()
 {
-    createNoteModal.showModal();
+    createNoteModal.showModal()
 }
 
-// Close Note Modal
-function closeCreateNoteModal()
+// Open Delete All Notes Modal
+function openDeleteAllNotesModal()
 {
-    createNoteModal.close();
+    deleteAllNotesModal.showModal()
 }
 
 // Create Note
-function createNote(title, body)
+function createNote(id, title, body, style)
 {
-    const note = createNoteContainer(`note ${randomNoteStyle()}-note`);
-    const noteTitle = createNoteTitle('note-title');
-    noteTitle.textContent = title;
+    const note = createNoteContainer(`note ${style}-note`)
+    note.setAttribute('data-id', id)
+    const noteTitle = createNoteTitle('note-title')
+    noteTitle.textContent = title
 
-    const noteText = createNoteText('note-body');
-    noteText.textContent = body;
+    const noteText = createNoteText('note-body')
+    noteText.textContent = body
 
-    const editNoteButton = createEditNoteButton('btn edit-note-btn');
-    const deleteNoteButton = createDeleteNoteButton('btn delete-note-btn');
+    const editNoteButton = createEditNoteButton('btn edit-note-btn')
+    const deleteNoteButton = createDeleteNoteButton('btn delete-note-btn')
 
     // Create container for buttons and append buttons inside
-    const noteButtonsContainer = createNoteButtonsContainer('note-buttons-container');
-    noteButtonsContainer.append(editNoteButton, deleteNoteButton);
+    const noteButtonsContainer = createNoteButtonsContainer('note-buttons-container')
+    noteButtonsContainer.append(editNoteButton, deleteNoteButton)
 
     // Append elements to the note
-    note.append(noteTitle, noteText, noteButtonsContainer);
-    notesContainer.appendChild(note);
+    note.append(noteTitle, noteText, noteButtonsContainer)
+    notesContainer.appendChild(note)
 }
+
+// Fetch notes
+async function fetchNotes()
+{
+    const { data, error } = await supabase
+        .from('notes')
+        .select('*')
+        .order('created_at', { ascending: true })
+
+    notesContainer.innerHTML = ''
+    data.forEach((note) => createNote(note.id, note.note_title, note.note_text, note.note_style))
+
+    // Ensure the delete button state is correct after fetching notes
+    displayDeleteAllNotesButton()
+}
+fetchNotes()
+
 
 function randomNoteStyle()
 {
-    const noteClasses = ['primary', 'secondary', 'tertiary', 'quaternary'];
-    const randomNoteClass = noteClasses[Math.floor(Math.random() * noteClasses.length)];
-    return randomNoteClass;
+    const noteClasses = ['primary', 'secondary', 'tertiary', 'quaternary']
+    const randomNoteClass = noteClasses[Math.floor(Math.random() * noteClasses.length)]
+    return randomNoteClass
 }
 
 function createNoteContainer(noteContainerClasses)
 {
-    const noteContainer = document.createElement('article');
-    noteContainer.className = noteContainerClasses;
-    return noteContainer;
+    const noteContainer = document.createElement('article')
+    noteContainer.className = noteContainerClasses
+    return noteContainer
 }
 
 function createNoteTitle(noteTitleClasses)
 {
-    const noteTitle = document.createElement('h3');
-    noteTitle.className = noteTitleClasses;
-    return noteTitle;
+    const noteTitle = document.createElement('h3')
+    noteTitle.className = noteTitleClasses
+    return noteTitle
 }
 
 function createNoteText(noteTextClasses)
 {
-    const noteText = document.createElement('p');
-    noteText.className = noteTextClasses;
-    return noteText;
+    const noteText = document.createElement('p')
+    noteText.className = noteTextClasses
+    return noteText
 }
 
 function createNoteButtonsContainer(noteButtonsContainerClasses)
 {
-    const noteButtonsContainer = document.createElement('div');
-    noteButtonsContainer.className = noteButtonsContainerClasses;
+    const noteButtonsContainer = document.createElement('div')
+    noteButtonsContainer.className = noteButtonsContainerClasses
     noteButtonsContainer.addEventListener('click', (e) => updateNote(e))
 
-    return noteButtonsContainer;
+    return noteButtonsContainer
 }
 
 function createEditNoteButton(editNoteButtonClasses)
 {
-    const editNoteButton = document.createElement('button');
-    editNoteButton.className = editNoteButtonClasses;
+    const editNoteButton = document.createElement('button')
+    editNoteButton.className = editNoteButtonClasses
 
     // Create the pencil icon element
-    const editNoteButtonIcon = document.createElement('i');
-    editNoteButtonIcon.className = "fas fa-pencil-alt"; // FontAwesome class
+    const editNoteButtonIcon = document.createElement('i')
+    editNoteButtonIcon.className = "fas fa-pencil-alt" // FontAwesome class
 
     // Append icon to button
-    editNoteButton.appendChild(editNoteButtonIcon);
+    editNoteButton.appendChild(editNoteButtonIcon)
 
-    return editNoteButton;
+    return editNoteButton
 }
 
 function createDeleteNoteButton(deleteNoteButtonClasses)
 {
-    const deleteNoteButton = document.createElement('button');
-    deleteNoteButton.className = deleteNoteButtonClasses;
-    
+    const deleteNoteButton = document.createElement('button')
+    deleteNoteButton.className = deleteNoteButtonClasses
+
     // Create the trash icon element
-    const deleteNoteButtonIcon = document.createElement('i');
-    deleteNoteButtonIcon.className = "fas fa-trash-alt"; // FontAwesome class
+    const deleteNoteButtonIcon = document.createElement('i')
+    deleteNoteButtonIcon.className = "fas fa-trash-alt" // FontAwesome class
 
     // Append icon to button
-    deleteNoteButton.appendChild(deleteNoteButtonIcon);
+    deleteNoteButton.appendChild(deleteNoteButtonIcon)
 
-    return deleteNoteButton;
+    return deleteNoteButton
 }
 
 function validateSubmitForm(e)
 {
     e.preventDefault()
 
-    if(noteTitleInputField.value.trim() === '' || noteTextInputField.value.trim() == '')
+    if (noteTitleInputField.value.trim() === '' || noteTextInputField.value.trim() == '')
     {
         alert('Please fill out both fields correctly')
         return
@@ -154,36 +257,47 @@ function validateSubmitForm(e)
     else
     {
         submitNoteForm(e)
+        closeModal(e)
+        fetchNotes()
     }
 }
 
 // Submit Note Form
-function submitNoteForm(e)
+async function submitNoteForm(e)
 {
     e.preventDefault()
 
     const formData = new FormData(createNoteForm)
     const noteTitle = formData.get('note-title')
     const noteBody = formData.get('note-body')
+    const noteStyle = randomNoteStyle()
 
-    // Create Note with form data
-    createNote(noteTitle, noteBody)
+    const { data, error } = await supabase.from('notes').insert({
+        note_title: noteTitle,
+        note_text: noteBody,
+        note_style: noteStyle,
+    }).select()
 
-    // Close create note modal on submit
-    closeCreateNoteModal()
+    if (error)
+    {
+        console.error("Error inserting note:", error)
+        return
+    }
 
-    // Clear create note form inputs on submit
+    // ✅ Use returned data to get the inserted note ID
+    createNote(data.id, noteTitle, noteBody, noteStyle)
+
     clearOpenDialogInputs()
-
+    fetchNotes()
 }
 
 function updateNote(e)
 {
-    if(e.target.matches('.edit-note-btn'))
+    if (e.target.matches('.edit-note-btn'))
     {
-       editNote(e)
+        editNote(e)
     }
-    else if(e.target.matches('.delete-note-btn'))
+    else if (e.target.matches('.delete-note-btn'))
     {
         showDeleteNoteModal(e.target.closest('.note'))
     }
@@ -196,10 +310,28 @@ function clearOpenDialogInputs()
 }
 
 
-function deleteNote(e)
+async function deleteNote(note, e)
 {
-    closeDeleteNoteModal()
-    e.target.closest('.note').remove()
+    const noteId = note.getAttribute('data-id')
+
+    const { error } = await supabase
+        .from('notes')
+        .delete()
+        .eq('id', noteId)
+
+    if (error)
+    {
+        console.error("Error deleting note:", error)
+        return
+    }
+
+    note.remove()
+    closeModal(e)
+
+    // Update the delete button state
+    displayDeleteAllNotesButton()
+
+    noteToDelete = null
 }
 
 function showDeleteNoteModal(note)
@@ -209,42 +341,29 @@ function showDeleteNoteModal(note)
     deleteNoteModal.showModal()
 }
 
-function closeDeleteNoteModal()
-{
-    deleteNoteModal.close()
-}
 
 let noteToDelete
 
 function confirmNoteDeleteAction(e)
 {
-    if(e.target.matches('.cancel-deletion-btn'))
+    if (e.target.matches('.confirm-deletion-btn'))
     {
-        closeDeleteNoteModal()
+        if (noteToDelete, e)
+        {
+            deleteNote(noteToDelete, e)
+        }
     }
-    else if(e.target.matches('.confirm-deletion-btn'))
-    {
-        checkIfNoteToDeleteExists()
-    }
+
+    closeModal(e)
 }
 
-// Check if note to delete exists
-function checkIfNoteToDeleteExists()
-{
-    if(noteToDelete)
-    {
-        noteToDelete.remove()
-        noteToDelete = null
-        closeDeleteNoteModal()
-    }
-}
 
 let noteToEdit
 function editNote(e)
 {
     noteToEdit = e.target.closest('.note')
 
-    if(!noteToEdit)
+    if (!noteToEdit)
     {
         return
     }
@@ -269,35 +388,54 @@ function checkIfNoteToEditExists()
 
 let editedNote
 // Submit edited note
-function validateEditForm(e)
+async function validateEditForm(e)
 {
     e.preventDefault()
-    
-    if (!noteToEdit)
-    {
-        return
-    }
 
-    // Get new input values
+
+
+    // Get the new values from input fields
     const updatedTitle = document.querySelector('#edit_note_title_input').value.trim()
     const updatedBody = document.querySelector('#edit_note_body_text_input').value.trim()
 
-    if (updatedTitle === '' || updatedBody === '') {
+    // Check if both fields are filled
+    if (!updatedTitle || !updatedBody)
+    {
         alert('Both fields must be filled out!')
         return
     }
 
-    // Update the existing note's title and body
-    noteToEdit.querySelector('.note-title').textContent = updatedTitle
-    noteToEdit.querySelector('.note-body').textContent = updatedBody
+    // Extract the note ID (assuming it's stored as a data attribute in the note row)
+    const noteId = noteToEdit.dataset.id
 
-    // Close edit modal after updating
-    editNoteModal.close()
 
-    // Clear modal inputs
+    // Update the note in the database
+    const { error } = await supabase
+        .from('notes')
+        .update({ note_title: updatedTitle, note_text: updatedBody })
+        .eq('id', noteId)  // Ensure the update is applied to the correct note
+
+    // Close the edit modal
+    closeModal(e)
+
+    // Clear modal input fields
     document.querySelector('#edit_note_title_input').value = ''
     document.querySelector('#edit_note_body_text_input').value = ''
 
-    // Reset reference
+    // Reset the reference to the edited note
     noteToEdit = null
+
+    fetchNotes()
+}
+
+// Delete all notes
+async function deleteAllNotes(e)
+{
+    const { data, error } = await supabase
+        .from('notes')
+        .delete()
+        .neq('id', 0)
+
+    fetchNotes()
+    closeModal(e)
 }

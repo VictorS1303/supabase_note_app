@@ -1,3 +1,31 @@
+/* Filter Container */
+.container.filter-container
+{
+    position: relative;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 50px;
+    width: 100%;
+
+    & .filter-input
+    {
+        background-color: transparent;
+        border-bottom: 2px solid #fff;
+        width: 40%;
+        color: #fff;
+        font-size: 1rem;
+        padding-bottom: 2px;
+        transition: width .3s ease-in;
+
+        &::placeholder
+        {
+            color: inherit;
+        }
+    }
+
+
+}
+
 .container.notes-container
 {
     display: flex;
@@ -13,85 +41,12 @@
 /* Create Note Modal */
 dialog.create-note-modal
 {
-    position: absolute;
-    top: -50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #fff;
+    
     height: 500px;
     width: 400px;
     padding: 40px;
     transition: top .3s ease-in;
     overflow: hidden;
-
-    &[open]
-    {
-        top: 50%;
-        transition: top .3s ease-in;
-    }
-
-    &::backdrop
-    {
-        backdrop-filter: blur(10px);
-        transition: backdrop-filter .3s ease-in;
-    }
-
-    & form
-    {
-        display: flex;
-        flex-direction: column;
-        margin-top: 30px;
-        gap: 60px;
-        height: 100%;
-
-        & div
-        {
-            font-family: inherit;
-            display: inherit;
-            flex-direction: inherit;
-            gap: 10px;
-        }
-
-        & input
-        {
-            border: 1.5px solid #000;
-            padding: 10px;
-        }
-        
-        & input,
-        & textarea
-        {
-            font-family: inherit;
-            transition: box-shadow .15s ease-in;
-
-            &:focus
-            {
-                box-shadow: inset var(--box-shadow);
-                transition: box-shadow .15s ease-in;
-            }
-        }
-
-        & textarea
-        {
-            height: 150px;
-            border: 1.5px solid #000;
-            text-indent: 10px;
-            padding-top: 10px;
-            
-        }
-
-        & .submit-create-note-btn
-        {
-            font-family: inherit;
-            color: #fff;
-            background-color: #000;
-            padding: 10px;
-            font-size: 17px;
-            margin-top: -20px;
-            box-shadow: var(--box-shadow);
-            cursor: pointer;
-        }
-    }
 }
 
 /* Create Note Modal Button */
@@ -116,88 +71,18 @@ dialog.create-note-modal
 {
     display: grid;
     text-align: center;
-    position: absolute;
-    top: -50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 60vw;
-    height: 250px;
     box-shadow: var(--box-shadow);
-
-    &[open]
-    {
-        top: 50%;
-    }
-
-    &::backdrop
-    {
-        backdrop-filter: blur(10px) !important;
-        transition: backdrop-filter .3s ease-in;
-    }
-    
-    & .delete-note-modal-close-btn
-    {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-
-        & i
-        {
-            font-size: 15px;
-        }
-    }
-    
-    & p
-    {
-        position: relative;
-        top: 75%;
-    }
-    
-    
     
     & .delete-note-modal-buttons-container
     {
         display: flex;
         justify-content: space-around;
-        align-self: end;
-        padding-bottom: 40px;
-        padding-inline: 100px;
         gap: 20px;
+    }
 
-        & .btn
-        {
-            font-family: inherit;
-            font-size: 15px;
-            padding: 5px 15px;
-            width: fit-content;
-            min-width: 100px;
-            transition: opacity .15s ease-in;
-        }
-
-        & .btn:hover
-        {
-            opacity: .85;
-            transition: opacity .15s ease-in;
-        }
-
-        & .btn:active
-        {
-            transform: scale(.98);
-        }
-        
-        & .cancel-deletion-btn
-        {
-            color: #000;
-            background-color: greenyellow;
-        }
-
-        & .confirm-deletion-btn
-        {
-            color: #fff;
-            background-color: red;
-        }
-
-        
+    & p
+    {
+        margin: 60px 0 40px 0;
     }
 }
 
@@ -212,7 +97,7 @@ dialog.create-note-modal
     height: 500px;
     width: 400px;
     padding: 40px;
-    transition: top .3s ease-in;
+    transition: top .3s ease-in, backdrop-filter .3s ease-in;
     overflow: hidden;
 
     &[open]
@@ -281,6 +166,67 @@ dialog.create-note-modal
             margin-top: -20px;
             box-shadow: var(--box-shadow);
             cursor: pointer;
+        }
+    }
+}
+
+.btn.delete-all-notes-modal-btn
+{
+    position: absolute;
+    left: 20px;
+    bottom: -40px;
+    font-size: 20px;
+    transition: color .15s ease-in, bottom .3s ease-in;
+
+    &.active
+    {
+        bottom: 20px;
+        transition: bottom .3s ease-in;
+    }
+
+    :hover
+    {
+        color: red;
+        transition: color .15s ease-in;
+    }
+
+    :active
+    {
+        transform: scale(.98);
+        transition: none;
+    }
+}
+
+/* Delete All Notes Modal */
+.delete-all-notes-modal
+{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    width: fit-content;
+    padding: 20px 40px;
+
+    .confirm-delete-all-notes-buttons-container
+    {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        margin-top: 40px;
+
+        & .btn
+        {
+            font-family: inherit;
+            font-size: 17px;
+            padding: 10px 20px;
+            transition: opacity .15s ease-in;
+
+            &:last-of-type
+            {
+                margin-top: -20px;
+            }
         }
     }
 }
